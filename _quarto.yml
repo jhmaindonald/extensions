@@ -8,7 +8,8 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
-
+      - boostVSbag.qmd
+        
 format:
   html:
     theme: cosmo

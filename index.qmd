@@ -2,10 +2,6 @@
 title: "Extensions"
 ---
 
-This is a Quarto website.
+This has notes that enlarge on the contents of the text
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
+"A Practical Guide to Data Analysis Using R," by John Maindonald, John Braun and Jeffrey Andrews, Cambridge University Press, 2024.
