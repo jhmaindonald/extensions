@@ -199,8 +199,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The random forest <em>bagging</em> approach takes bootstrap samples from the data, creates a tree for each bootstrap sample (‘bag’), and uses votes across all trees to determine predicted values. Among R packages that implement this approach, note in particular <em>randomForest</em> and <em>ranger</em>. The default number of trees, both for the <em>randomForest</em> function <code>randomForest()</code> and for the <em>ranger</em> function <code>ranger()</code>, is 500. Assuming that the sample data can be treated as a random sample from the population to&nbsp;which results will be applied, the ‘out-of-bag’ error estimate provides an unbiased estimate of the error rate.</p>
-<p>By contrast, the boosting approach fits one or&nbsp;a small number of trees. For each of the one or more trees, it then calculates the residuals, and fits a tree to the residuals. The process by which each&nbsp;new tree is derived, designed to maximize the ‘gain’, is relatively complex and will not be described here. The parameter <code>eta</code>, with values greater than 0 and at most 1, controls the “learning rate”. It sets a factor by which the contribution of each new tree is scaled when it is added to the current approximation. The default is <code>eta</code>=0.3. Smaller values allow finer control over the learning rate, and provide a way to make the model more robust to overfitting, while slowing computations.</p>
+<p>The random forest <em>bagging</em> approach takes bootstrap samples from the data, creates a tree for each bootstrap sample (‘bag’), and uses votes across all trees to determine predicted values. Among R packages that implement this approach, note in particular <em>randomForest</em> and <em>ranger</em>. The <em>ranger</em> package handles calculations much more efficiently than <em>randomForest</em>, and should be used in preference to <em>randomForest</em> with large datasets.</p>
+<p>The default number of trees, both for the <em>randomForest</em> function <code>randomForest()</code> and for the <em>ranger</em> function <code>ranger()</code>, is 500. Assuming that the sample data can be treated as a random sample from the population to&nbsp;which results will be applied, the ‘out-of-bag’ error estimate provides an unbiased estimate of the error rate.</p>
+<p>By contrast, the boosting approach that is implemented in the <em>xgboost</em> package starts by fitting one or perhaps a small number of trees. For each of the one or more trees, it then calculates the residuals, and fits a tree to the residuals. The process by which each&nbsp;new tree is derived, designed to maximize the ‘gain’, is relatively complex and will not be described here. The parameter <code>eta</code>, with values greater than 0 and at most 1, controls the “learning rate”. It sets a factor by which the contribution of each new tree is scaled when it is added to the current approximation. The default is <code>eta</code>=0.3. Smaller values allow finer control over the learning rate, and provide a way to make the model more robust to overfitting, while slowing computations.</p>
 <p>Whereas the defaults for random forest parameters generally do a good job, and extensive tuning is not required, <em>xgboost</em> parameters do typically require tuning.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(data.table))</span>
@@ -226,7 +227,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>The importance values are very widely spread. The number of columns (out of 126) that have some level of importance is 116. The 11 rated as having importance equal to zero either have all values the same, or (one column only) have just one value that differs from the rest.</p>
+<p>The importance values are very widely spread. The number of columns (out of 126) that have some level of importance is 115. The 11 rated as having importance equal to zero either have all values the same, or (one column only) have just one value that differs from the rest.</p>
 <p>Now look at the predicted values. Values less than or equal to 0.5 will be treated as implying non-poisonous, with those greater than 0.5 implying poisonous of possibly poisonous:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(rf1, <span class="at">data=</span>test<span class="sc">$</span>data)<span class="sc">$</span>predictions</span>
@@ -528,7 +529,7 @@ R squared (OOB):                  0.9886767 </code></pre>
 <pre><code>[1] 0.01141683</code></pre>
 </div>
 </div>
-<p>As expected this is very similar to the OOB mse.</p>
+<p>As expected this is very similar to the OOB mean square error.</p>
 <section id="fit-using-xgboostxgb.train" class="level3">
 <h3 class="anchored" data-anchor-id="fit-using-xgboostxgb.train">Fit using <code>xgboost::xgb.train()</code></h3>
 <p>The <code>diamonds</code> data includes some columns that are factors or ordered factors.</p>
